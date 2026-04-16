@@ -1,4 +1,4 @@
-%[text] # Step 6: Real-time CNN classifier with live GUI
+%[text] # Stage 7: Real-time CNN classifier with live GUI
 %[text] Loads a pre-trained network (.mat file) and classifies incoming sensor signals streamed from a physical sensorized device via Bluetooth serial.
 %[text] 
 %[text] Hardware requirements:
@@ -28,7 +28,7 @@
 %[text]  useGPU    - Boolean flag for GPU-accelerated inference
 %[text] 
 %% Real-time CNN classifier from COM15 (lag-optimized; safe shutdown)
-% - Uses a dlnetwork saved as convoPlushNet in convoPlushNet.mat (with classNames)
+% - Uses a dlnetwork saved as convoPlushNetMCU in convoPlushNetMCU.mat (with classNames)
 % - Reads CR/LF-terminated lines of 14 integers from COM15 (ignores the 14th)
 % - Replaces accel X/Y/Z (cols 11–13) with magnitude in col 11 → 11 features total
 % - Sliding window of 250 samples; inference every HOP samples
@@ -41,7 +41,7 @@ net = S.convoPlushNetMCU;                 % dlnetwork
 classNames = string(S.classNames(:));  % 18×1 string
 
 %% Parameters
-comPort  = "COM7"; % Dog_R_02: COM5/6 Cat_R_02: 7/8
+comPort  = "COM7";    % set to your device
 baudRate = 115200;    % set to your device
 fs       = 100;       % Hz (for reference)
 winLen   = 250;       % model window length (samples) def=250

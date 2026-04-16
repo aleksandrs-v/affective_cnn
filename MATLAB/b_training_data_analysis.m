@@ -1,4 +1,4 @@
-%[text] # Step 2: Training data quality control - outlier detection and visualization
+%[text] # Stage 3: Training data quality control - outlier detection and visualization
 %[text] 
 %[text] This script enables the user to analyze the collected training data by identifying and visualizing outliers - samples whose recording length deviates significantly from the class average.
 %[text] For each selected gesture class, the script computes:
@@ -48,7 +48,7 @@ endClass   = numel(classNames);  % change these to analyze a subset
 % Clamp to valid range in case user edits
 startClass = max(1, min(startClass, numel(classNames)));
 endClass   = max(startClass, min(endClass, numel(classNames)));
-%[text] Set the permissable deviation, which defines outliers:
+%[text] Set the permissible deviation, which defines outliers:
 %% 3) Outlier threshold (fraction of mean length)
 thresholdRange = 0.4;  % e.g., 0.3 => ±30% from mean
 %[text] Now do the analysis and show results:
@@ -123,7 +123,7 @@ for c = startClass:endClass
         fprintf('No samples shorter than %.0f%% of mean.\n', thresholdRange*100);
     end
 
-    % --- 4.5) Plot and list "30%% longer" group
+    % --- 4.6) Plot and list "30%% longer" group
     if ~isempty(longIdx)
         figure('Name', sprintf('%s — Longer than %.0f%% of mean', className, thresholdRange*100));
         hold on

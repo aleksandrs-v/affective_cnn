@@ -1,4 +1,4 @@
-%[text] # Step 5: Manually train and evaluate various architectures
+%[text] # Stage 6: Manually train and evaluate various architectures
 %[text] 
 %[text] This script provides a self-contained training path for manually defining, training, and evaluating individual neural network  architectures. It is intended for exploratory experimentation and probing -- for systematic batch evaluation across multiple architectures and hyperparameters, use MATLAB Experiment Manager (see PlushCNNExperiment.mlx).
 %[text] 
@@ -11,7 +11,7 @@
 %[text] The user can modify any architecture definition or training parameters directly in the corresponding code section.
 %[text] Note: Mini-batch size defaults to the full training set size (full-batch gradient descent).
 %[text] 
-%[text] The first sections are OPTIONAL. They allow the user to use the same data to train other architectures, e.g. LSTM, biLSTM, e.g. for later comparatve analysis with CNNs:
+%[text] The first sections are OPTIONAL. They allow the user to use the same data to train other architectures, e.g. LSTM, biLSTM, e.g. for later comparative analysis with CNNs:
 %[text] LSTM: set training options, train the network.
 opts = trainingOptions("adam", ...
     ValidationData={valdata vallabels}, ...
@@ -137,7 +137,7 @@ convoLayersMCU = [
 
 %%
 %[text] Train the dilated CNN network:
-%[text] Worth mentioning, the number of epochs is fixed for consistency. We introduce other stopping criteria at a later stage, which helps to avoid overfitting.
+%[text] Worth mentioning, the number of epochs is fixed for consistency. Early stopping or patience-based criteria can be added by modifying the trainingOptions (e.g. setting ValidationPatience) to avoid overfitting.
 convoOpts = trainingOptions("adam", ...
     ValidationData={valdata vallabels}, ...
     Plots="training-progress", ...

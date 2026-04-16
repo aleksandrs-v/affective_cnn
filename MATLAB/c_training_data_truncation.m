@@ -1,7 +1,7 @@
-%[text] # Step 3: Truncation of the initial part of the training data 
+%[text] # Stage 4: Truncation of the initial part of the training data 
 %[text] Training datasets may contain hundreds or thousands of individual recordings. The initial portion of each recording typically captures the delay before the participant begins the gesture and contains no useful signal. Manually trimming these segments in a spreadsheet editor would be impractical at scale.
 %[text] 
-%[text] This script provides a streamlined GUI-based workflow for rapid truncation. The user clicks on the plotted waveform to mark the onset of intentional contact, then presses Enter to confirm and advance to the next recording. Additional keyboard shortcuts:
+%[text] This script provides a streamlined GUI-based workflow for rapid truncation. The user clicks on the plotted waveform to mark the onset of intentional contact, then presses Enter to confirm and advance to the next recording. It is also possible to set the truncation point by typing/scrolling a value in the spinner. Additional keyboard shortcuts:
 %[text]    Backspace  - return to the previous recording for correction
 %[text]    S          - save all accumulated decisions to truncate\_choices.csv
 %[text]    Q          - quit the review session (unsaved decisions are lost)

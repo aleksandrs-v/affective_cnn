@@ -1,4 +1,5 @@
-%[text] # Step 1: Group training data by label
+%[text] # Stage 1: Data Acquisition, done in Processing, using PlushSamples.pde
+%[text] # Stage 2: Group training data by label
 %[text] After data sample acquisition, signal data is organized into folders corresponding to individual participants, producing a directory structure such as:
 %[text] ./Training Data/Person1/Gesture1\_\[timestamp1\].csv
 %[text] ./Training Data/Person1/Gesture2\_\[timestamp2\].csv
@@ -95,7 +96,7 @@ fprintf('Done. Moved %d file(s) into "%s". Skipped %d file(s).\n', moved, dstDir
 %[text] 
 %[text] The next step is data reshuffling, which is done by replacing the timestamp with a random sequence:
 %[text] reshuffle the training data set by adding a random sequence after the class name.
-%[text] Although this step is optional, it ensures that gestures recorded by the same person are not positioned in a sequence.
+%[text] Although this step is optional, it serves two purposes: (1) it breaks any link between the file and its source participant, and (2) it prevents gestures recorded by the same person from clustering together when files are sorted alphabetically.
 %% Rename first numeric token in CSV filenames to a random 7-digit number
 % Structure:
 %   ./Training Data - labelled/<ClassName>/<ClassName>_NUM1_NUM2.csv
