@@ -12,7 +12,7 @@ Vališevskis, A. (2025). MATLAB Software Pipeline for Affective Tactile Gesture 
 
 The pipeline was used to design and validate the model reported in:
 
-Vališevskis, A. et al. (2025). Design and Validation of a Lightweight 1D CNN for Affective Touch Classification in Soft Plush Companions. arXiv preprint arXiv:\[ID TBD\].
+Vališevskis, A. et al. (2025). Design and Validation of a Lightweight 1D CNN for Affective Touch Classification in Soft Plush Companions. Zenodo preprint DOI: https://doi.org/10.5281/zenodo.19603884
 
 ## Pipeline Stages
 
