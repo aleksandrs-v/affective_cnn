@@ -1,5 +1,32 @@
-%[text] # Real-time CNN classifier v2
-%[text] Loads a pre-trained network and classifies the incoming signals from serial port COM15.
+%[text] # Step 6: Real-time CNN classifier with live GUI
+%[text] Loads a pre-trained network (.mat file) and classifies incoming sensor signals streamed from a physical sensorized device via Bluetooth serial.
+%[text] 
+%[text] Hardware requirements:
+%[text] The device must be paired via Bluetooth, creating a virtual COM port. Adjust the COM port name, baud rate (default: 115200), and frame parsing to match your specific hardware. The default configuration expects 14 integers per frame at 100 Hz.
+%[text] 
+%[text] Signal processing:
+%[text] Incoming frames are stored in a ring buffer. Once the buffer contains at least 'winLen' samples (default: 250), inference is run on the current window. The buffer advances by 'hop' samples (default: 50) between consecutive predictions.
+%[text] 
+%[text] The three accelerometer axes (X, Y, Z) are replaced by their vector magnitude sqrt(X^2 + Y^2 + Z^2), matching the feature reduction applied during training (Step 4). Any additional preprocessing applied during training must also be replicated here to ensure consistency between training and inference.
+%[text] 
+%[text] Softmax outputs are smoothed using an exponential moving average (EMA, alpha = 0.2 by default) to reduce frame-to-frame flickering in the displayed predictions.
+%[text] 
+%[text] GUI:
+%[text] The script opens a figure window displaying:
+%[text]  \- A dynamically updated bar chart of per-class likelihoods
+%[text]  \- The top predicted class label and its confidence score
+%[text]  \- A plot of the most recent sensor data window
+%[text] The display refresh rate is controlled by 'plotHop' (default: every 50 received frames), independent of the inference rate, to prevent GUI lag on slower systems.
+%[text] 
+%[text] Configuration parameters:
+%[text]  comPort   - Serial port name (e.g. 'COM7', 'COM15')
+%[text]  baudRate  - Serial baud rate (default: 115200)
+%[text]  winLen    - Sliding window length in samples (default: 250)
+%[text]  hop       - Inference stride in samples (default: 50)
+%[text]  plotHop   - Display refresh interval in frames (default: 50)
+%[text]  emaAlpha     - EMA smoothing coefficient (default: 0.2)
+%[text]  useGPU    - Boolean flag for GPU-accelerated inference
+%[text] 
 %% Real-time CNN classifier from COM15 (lag-optimized; safe shutdown)
 % - Uses a dlnetwork saved as convoPlushNet in convoPlushNet.mat (with classNames)
 % - Reads CR/LF-terminated lines of 14 integers from COM15 (ignores the 14th)

@@ -1,5 +1,21 @@
-%[text] # Toolkit for training data analysis/improvement
-%[text] Gives the user a numbered list of classes, so that the user can choose, which class to analyze
+%[text] # Step 2: Training data quality control - outlier detection and visualization
+%[text] 
+%[text] This script enables the user to analyze the collected training data by identifying and visualizing outliers - samples whose recording length deviates significantly from the class average.
+%[text] For each selected gesture class, the script computes:
+%[text]   \- Mean, median, standard deviation, minimum, and maximum recording length
+%[text]   \- Outlier status: a sample is flagged if its length deviates from the class mean by more than thresholdRange (default: 0.4, i.e. +/-40%)
+%[text] 
+%[text] All samples for each class are plotted as overlaid bars, with outliers rendered in a distinct colour for easy visual identification. The user can then decide whether to exclude, re-record, or retain flagged samples before proceeding to truncation (Step 3).
+%[text] 
+%[text] Usage:
+%[text]    1\. Run the script. A numbered list of gesture classes is displayed.
+%[text]    2\. Enter the number(s) of the class(es) to analyze.
+%[text]    3\. Inspect the generated plots and statistics.
+%[text] 
+%[text] Configuration
+%[text] thresholdRange: fraction of the class mean used to define outlier boundaries. A value of 0.4 means samples shorter than 0.6\*mean or longer than 1.4\*mean are flagged as outliers.
+%[text] 
+%[text] This section gives the user a numbered list of classes, so that the user can choose, which class(es) to analyze:
 %% Signal QA for "Training Data - labelled"
 % Scans class folders, summarizes sample lengths, and plots all samples and outliers.
 % Assumptions:
@@ -20,21 +36,22 @@ for i = 1:numel(classNames)
     fprintf('%2d) %s\n', i, classNames{i});
 end
 %%
-%[text] Full range of classes:
+%[text] 
+%[text] Use this code for the full range of classes:
 %% 2) User-selectable class range
 startClass = 1;
 endClass   = numel(classNames);  % change these to analyze a subset
-%[text] Uncomment and set these variables to analyze only one class or a subrange of classes:
-startClass = 4;
-endClass = 17;
-%[text] Do some checks:
+%[text] Or uncomment these lines and set these variables manually to analyze only one class or a subrange of classes:
+%startClass = 4;
+%endClass = 17;
+%[text] Some checks:
 % Clamp to valid range in case user edits
 startClass = max(1, min(startClass, numel(classNames)));
 endClass   = max(startClass, min(endClass, numel(classNames)));
-%[text] Edit this variable for other permissable deviations:
+%[text] Set the permissable deviation, which defines outliers:
 %% 3) Outlier threshold (fraction of mean length)
 thresholdRange = 0.4;  % e.g., 0.3 => ±30% from mean
-%[text] Finally, the analysis begins:
+%[text] Now do the analysis and show results:
 %% 4) Analyze each selected class
 for c = startClass:endClass
     className = classNames{c};

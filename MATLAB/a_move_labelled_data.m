@@ -1,5 +1,21 @@
-%[text] Code used to prepare Training data by moving CSV files from the folders organized by test persons to folders organized by the defines classes.
-%[text] First define source and target folders
+%[text] # Step 1: Group training data by label
+%[text] After data sample acquisition, signal data is organized into folders corresponding to individual participants, producing a directory structure such as:
+%[text] ./Training Data/Person1/Gesture1\_\[timestamp1\].csv
+%[text] ./Training Data/Person1/Gesture2\_\[timestamp2\].csv
+%[text] ./Training Data/Person2/Gesture1\_\[timestamp3\].csv
+%[text] etc.
+%[text] 
+%[text] For training, files must be reorganized into a class-centric layout where each folder corresponds to a gesture label:
+%[text] ./Training Data - labelled/Gesture1/Gesture1\_\[timestamp1\].csv
+%[text] ./Training Data - labelled/Gesture1/Gesture1\_\[timestamp2\].csv
+%[text] ./Training Data - labelled/Gesture2/Gesture2\_\[timestamp3\].csv
+%[text] etc.
+%[text] 
+%[text] Before running, set the source directory (person-centric layout) and the target directory (class-centric layout).
+%[text] Then you need to define a list of gestures. The program expects each CSV file to start with the name of a gesture, which is separated from the second part of the filename with an underscore ("\_").
+%[text] 
+%[text] The script processes all matching files automatically. During the copy, the first numeric token in each filename is replaced with a randomly generated 7-digit integer, anonymizing the data by breaking any link between the file and the original recording session or participant.
+%[text] 
 %% Reorganize training CSV files by label
 % Run this from the parent folder that contains:
 %   ./Training Data
@@ -77,7 +93,9 @@ end
 fprintf('Done. Moved %d file(s) into "%s". Skipped %d file(s).\n', moved, dstDir, skipped);
 %%
 %[text] 
-%[text] Reshuffle the training data set by adding a random sequence after the class name.
+%[text] The next step is data reshuffling, which is done by replacing the timestamp with a random sequence:
+%[text] reshuffle the training data set by adding a random sequence after the class name.
+%[text] Although this step is optional, it ensures that gestures recorded by the same person are not positioned in a sequence.
 %% Rename first numeric token in CSV filenames to a random 7-digit number
 % Structure:
 %   ./Training Data - labelled/<ClassName>/<ClassName>_NUM1_NUM2.csv
@@ -139,5 +157,5 @@ fprintf('Done. Renamed %d file(s); skipped %d file(s).\n', renamed, skipped);
 %[appendix]{"version":"1.0"}
 %---
 %[metadata:view]
-%   data: {"layout":"onright","rightPanelPercent":33.9}
+%   data: {"layout":"onright","rightPanelPercent":25.2}
 %---

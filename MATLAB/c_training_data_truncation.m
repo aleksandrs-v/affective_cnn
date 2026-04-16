@@ -1,6 +1,19 @@
-%[text] # Truncation of the initial part of the training data 
-%[text] A streamlined procedure for going throught the training data and truncating the initial portion of the signal, which frequently contains no useful information.
-%[text] First we go through all the files and determine the truncation point, no CSVs are truncated at this point:
+%[text] # Step 3: Truncation of the initial part of the training data 
+%[text] Training datasets may contain hundreds or thousands of individual recordings. The initial portion of each recording typically captures the delay before the participant begins the gesture and contains no useful signal. Manually trimming these segments in a spreadsheet editor would be impractical at scale.
+%[text] 
+%[text] This script provides a streamlined GUI-based workflow for rapid truncation. The user clicks on the plotted waveform to mark the onset of intentional contact, then presses Enter to confirm and advance to the next recording. Additional keyboard shortcuts:
+%[text]    Backspace  - return to the previous recording for correction
+%[text]    S          - save all accumulated decisions to truncate\_choices.csv
+%[text]    Q          - quit the review session (unsaved decisions are lost)
+%[text] 
+%[text] The procedure consists of two phases for data safety:
+%[text] Phase 1: The user reviews each recording in the GUI. Truncation points are saved to truncate\_choices.csv (semicolon-delimited) but no original files are modified.
+%[text] Phase 2: The script reads truncate\_choices.csv, creates a timestamped backup of all original files, and then overwrites each file with its truncated version.
+%[text] 
+%[text] This separation ensures that the original data is never modified until the user has reviewed and confirmed all truncation decisions.
+%[text] 
+%[text] ## Phase 1: Interactive review - determine truncation points
+%[text] No CSV files are modified during this phase.
 %% Interactive truncation curator (MATLAB R2024a+)
 % Iterates through CSV files under "Training Data - labelled", shows a plot,
 % user enters number of initial samples to truncate, presses Enter to advance.
@@ -181,7 +194,7 @@ end % wrapper end
 
 truncationCurator; % call the wrapper
 %%
-%[text] Now we are ready to actually truncate the files:
+%[text] ## Phase 2: Create a backup and truncate the CSV files
 %% OVERWRITE originals after backing up (robust to header renaming)
 baseDir    = fullfile(pwd, 'Training Data - labelled');
 choicesPath = fullfile(pwd, 'truncate_choices.csv');

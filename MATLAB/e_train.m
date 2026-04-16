@@ -1,9 +1,18 @@
-%[text] # Manually train and evaluate various architectures
+%[text] # Step 5: Manually train and evaluate various architectures
 %[text] 
-%[text] Define and traing various architectures of neural networks, construct confusion matrices etc.
+%[text] This script provides a self-contained training path for manually defining, training, and evaluating individual neural network  architectures. It is intended for exploratory experimentation and probing -- for systematic batch evaluation across multiple architectures and hyperparameters, use MATLAB Experiment Manager (see PlushCNNExperiment.mlx).
 %[text] 
-%[text] You can even try LSTM networks first:
-%[text] Set training options, train the network.
+%[text] Each architecture section includes:
+%[text]    \- Network layer definition
+%[text]    \- Training options (Adam optimizer, cross-entropy loss)
+%[text]    \- Training execution
+%[text]    \- Confusion matrix construction and accuracy evaluation
+%[text] 
+%[text] The user can modify any architecture definition or training parameters directly in the corresponding code section.
+%[text] Note: Mini-batch size defaults to the full training set size (full-batch gradient descent).
+%[text] 
+%[text] The first sections are OPTIONAL. They allow the user to use the same data to train other architectures, e.g. LSTM, biLSTM, e.g. for later comparatve analysis with CNNs:
+%[text] LSTM: set training options, train the network.
 opts = trainingOptions("adam", ...
     ValidationData={valdata vallabels}, ...
     Plots="training-progress", ...
@@ -27,8 +36,7 @@ testpred = scores2label(testscores,c)
 confusionchart(testlabels,testpred)
 
 %%
-%[text] 
-%[text] Try bidirectional layer and retrain:
+%[text] Now try with bidirectional layer (biLSTM) and retrain:
 layers = [
     sequenceInputLayer(11)
     bilstmLayer(512,OutputMode="last")
@@ -46,13 +54,14 @@ opts = trainingOptions("adam", ...
 
 plushnet = trainnet(traindata,trainlabels,layers,"crossentropy",opts)
 %%
-%[text] Retest accuracy of the improved model
+%[text] Re-test accuracy of the new model:
 acc = testnet(plushnet,testdata,testlabels,"accuracy")
 testscores = minibatchpredict(plushnet,testdata);
 testpred = scores2label(testscores,c);
 confusionchart(testlabels,testpred)
 %%
-%[text] Test another architecture - CNN
+%[text] ## CNN
+%[text] Now it is time to train a CNN model. This section is meant for testing different CNN architectures before moving to batch-training using Experiment Manager. It allows to manually probe, which changes have what influence on the performance of the model to make informative decisions on the sweep-testing of the parameters.
 convoLayers = [
     sequenceInputLayer(11,"Name","input")
     convolution1dLayer(28,32,"Name","convolution1","Padding","causal","PaddingValue","symmetric-exclude-edge") % return causal?  change filter size = looking back into history
@@ -86,7 +95,8 @@ testpred = scores2label(testscores,c);
 confusionchart(testlabels,testpred)
 
 %%
-%[text] Save the model for later testing on real-time data, if you are satisfied with the results
+%[text] Save the model for later testing on real-time data, if you are satisfied with the results.
+%[text] The model is saved as a MAT file and can be loaded in this or other scripts (e.g. for real-time testing at the next step).
 % In your training session (once)
 classNames = [ ...
 "At rest","Back stroke 1","Back stroke 2","Ear scratch 1","Ear scratch 2", ...
@@ -97,7 +107,7 @@ classNames = [ ...
 save('convoPlushNet-NewData5k-d1d2d4.mat','convoPlushNet','classNames');  % just the net + label order
 
 %%
-%[text] Tedt dilated 1-D CNN for MCU
+%[text] Test dilated 1-D CNNs that are more suitable for MCUs:
 % Dilated causal CNN for MCU use (softmax last; trainable with trainnet)
 % 11 inputs @100 Hz -> 18 classes
 convoLayersMCU = [
@@ -126,7 +136,8 @@ convoLayersMCU = [
 
 
 %%
-%[text] Train the MCU network
+%[text] Train the dilated CNN network:
+%[text] Worth mentioning, the number of epochs is fixed for consistency. We introduce other stopping criteria at a later stage, which helps to avoid overfitting.
 convoOpts = trainingOptions("adam", ...
     ValidationData={valdata vallabels}, ...
     Plots="training-progress", ...
@@ -139,16 +150,15 @@ convoPlushNetMCU = trainnet(traindata,trainlabels,convoLayersMCU,"crossentropy",
 
 
 %%
-%[text] Retest accuracy of the convolution model
+%[text] Retest accuracy of the model
 acc = testnet(convoPlushNetMCU,testdata,testlabels,"accuracy")
 testscores = minibatchpredict(convoPlushNetMCU,testdata);
 c = categories(trainlabels);
 testpred = scores2label(testscores,c);
 confusionchart(testlabels,testpred)
 
-%[text]  
 %%
-%[text] Save the optimized MCU model for real-time testing
+%[text] Save the optimized model, e.g. for real-time testing
 % In your training session (once)
 classNames = [ ...
 "At rest","Back stroke 1","Back stroke 2","Ear scratch 1","Ear scratch 2", ...
@@ -162,5 +172,5 @@ save('convoPlushNetMCU.mat','convoPlushNetMCU','classNames');  % just the net + 
 %[appendix]{"version":"1.0"}
 %---
 %[metadata:view]
-%   data: {"layout":"onright","rightPanelPercent":30}
+%   data: {"layout":"onright","rightPanelPercent":11.7}
 %---
