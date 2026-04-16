@@ -48,17 +48,7 @@ For Stage 1 (data acquisition), open `Processing/PlushSamples.pde` in the Proces
 
 ## Configuration
 
-Key parameters that must be adjusted for your specific setup:
-
-| Parameter | Script | Default | Description |
-| :---- | :---- | :---- | :---- |
-| Source/target directories | `a_move_labelled_data.m` | \-- | Paths to raw and reorganized training data |
-| `GESTURES` array | `a_move_labelled_data.m` | 17 classes | List of gesture class names |
-| `thresholdRange` | `b_training_data_analysis.m` | 0.4 | Outlier detection threshold (fraction of class mean) |
-| `winLen` | `d_data_preparation.m` | 250 | Sliding window length (samples) |
-| `hop` | `d_data_preparation.m` | 50 | Sliding window hop stride (samples) |
-| COM port | `f_realtime_classifier.m` | COM7 | Bluetooth serial port for the sensorized device |
-| `alpha` | `f_realtime_classifier.m` | 0.2 | EMA smoothing coefficient |
+See a description and a list of key parameters in each section to adapt the code to your needs/hardware.
 
 ## Symbolic CNN Architecture DSL
 
